@@ -1,9 +1,8 @@
 import React from 'react';
 import {TextField, Button, Card, Typography, CardActionArea} from '@material-ui/core';
 import {Add} from '@material-ui/icons';
-import { makeStyles } from '@material-ui/core/styles';
 import './rooms.css'
-import { Link, Redirect, useHistory } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import AppBarStyled from '../Component/AppBar';
 
 class AddRoom extends React.Component{
@@ -59,50 +58,50 @@ class AddRoom extends React.Component{
   render(){
 
       return(
-          <div>
-              <AppBarStyled name="Add Room"/>
-              <form onSubmit={this.handleSubmit}>
-              <div className="formDiv">
-                <TextField
-                  autoComplete="off"
-                  inputProps={{
-                    style : {
-                      color : 'white',
-                    }
-                  }}
-                  InputLabelProps={{
-                    style : {
-                      color : 'white'
-                    }
-                  }}
-                  style = {{margin: "10px"}}
-                  label="Room Name"
-                  variant="outlined"
-                  name="roomName"
-                  value={this.state.roomName}
-                  onChange={this.handleChange}/>
-                <TextField
-                  autoComplete="off"
-                  inputProps={{
-                    style : {
-                      color : 'white',
-                    }
-                  }}
-                  InputLabelProps={{
-                    style : {
-                      color : 'white'
-                    }
-                  }}
-                  style = {{margin: "10px"}}
-                  label="Floor No." 
-                  variant="outlined" 
-                  name="floor"
-                  value={this.state.floor} 
-                  onChange={this.handleChange}/>
-                <Button variant="contained" color="primary" type="submit" style = {{margin: "10px"}}>Add</Button>
-              </div>
-              </form>
+        <div>
+          <AppBarStyled name="Add Room"/>
+          <form onSubmit={this.handleSubmit}>
+          <div className="formDiv">
+            <TextField
+              autoComplete="off"
+              inputProps={{
+                style : {
+                  color : 'white',
+                }
+              }}
+              InputLabelProps={{
+                style : {
+                  color : 'white'
+                }
+              }}
+              style = {{margin: "10px"}}
+              label="Room Name"
+              variant="outlined"
+              name="roomName"
+              value={this.state.roomName}
+              onChange={this.handleChange}/>
+            <TextField
+              autoComplete="off"
+              inputProps={{
+                style : {
+                  color : 'white',
+                }
+              }}
+              InputLabelProps={{
+                style : {
+                  color : 'white'
+                }
+              }}
+              style = {{margin: "10px"}}
+              label="Floor No." 
+              variant="outlined" 
+              name="floor"
+              value={this.state.floor} 
+              onChange={this.handleChange}/>
+            <Button variant="contained" color="primary" type="submit" style = {{margin: "10px"}}>Add</Button>
           </div>
+          </form>
+        </div>
       )
   }
 }
@@ -132,15 +131,17 @@ class AllRooms extends React.Component{
   }
 
   render(){
-    const Room = ({roomName, floor}) => (
+    const Room = ({roomName, floor, rId}) => (
       <div>
-        <Card elevation={5} className="root1" variant="outlined" style={{background: "#000000", borderColor:'#424242'}}>
-          <CardActionArea>
+        <Card elevation={5} className="root1" variant="outlined" style={{background: "black", borderColor:'#424242'}}>
+          <Link to={`/devices/room/${rId}`} style={{width : "100%", height : "100%", textDecoration: "none"}}>
+          <CardActionArea style={{height : "100%", color: '#424242'}}>
             <div className="root2">
               <Typography variant="h4">{roomName}</Typography>
               <Typography variant="h4">{floor}</Typography>
             </div>
           </CardActionArea>
+          </Link>
         </Card>
       </div>
     )
@@ -154,6 +155,7 @@ class AllRooms extends React.Component{
           <Room
             roomName={rm.roomName}
             floor={rm.floor}
+            rId={rm.roomId}
           />
           </div>
         ))

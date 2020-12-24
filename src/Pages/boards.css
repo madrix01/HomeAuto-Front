@@ -1,0 +1,35 @@
+h1{
+
+}
+
+.formDiv{
+    color: white;
+    margin-left: 10vw;
+    margin-right: 10vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.tf{
+    margin: 10px;
+}
+
+.root1{
+    background: blueviolet;
+    margin: 2.5vw;
+    height: 10vh;
+    display: flex;
+    align-items: center;
+    
+    justify-content: space-between;
+}
+
+.root2{
+    padding-left: 2vw;
+    padding-right: 2vw;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: white;
+}
