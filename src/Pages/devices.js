@@ -1,5 +1,5 @@
 import React from 'react';
-import {TextField, Button, Card, Typography, CardActionArea} from '@material-ui/core';
+import { Card, Typography, CardActionArea} from '@material-ui/core';
 import AppBarStyled from '../Component/AppBar';
 import "./rooms.css"
 
@@ -8,8 +8,7 @@ class DevicesInRoom extends React.Component{
   constructor(props) {
     super(props);
     this.state = {
-        devices : [],
-        dState: false,
+      devices : [],
     }
     this.getDevices = this.getDevices.bind(this);
   }
@@ -18,25 +17,46 @@ class DevicesInRoom extends React.Component{
     let {id} = this.props.match.params;
     const res = await fetch(`http://192.168.29.69:8000/devices/room/${id}`);
     const data = await res.json();
-    this.state.dState = data.state;
+    this.setState({devices : data});
     return data;
   }
+
+  async handleSubmit(dev){
+    return event => {
+      const sendIoReq = async () => { 
+        var reqBody = `boardId=${dev.boardId}&pinAdress=${dev.pinAdress}&stateTc=${!dev.state}`;
+        dev.state = !dev.state
+        console.log(reqBody);
+        const response = await fetch('http://192.168.29.69:8000/io/', {
+          method: 'POST',
+          headers : {
+            'Content-Type' : 'application/x-www-form-urlencoded'
+          },
+          body : reqBody
+        });
+        const data = await response.json();
+        console.log(data);
+      }
+      sendIoReq().then(console.log("Request sent")).then(console.log(this.state.devices[1]));
+      event.preventDefault();
+    }
+  }
+
 
   async componentDidMount(){
     const devices = await this.getDevices();
     this.setState({devices : devices});
-    console.log(this.state.devices);
   }
 
+  // this.state.devices[index].state?"green": "red"
   render(){
-    const Device = ({deviceName, state}) => (
+    const Device = (devc, index) => (
       <div>
-        <Card elevation={5} className="root1" variant="outlined" style={{background: "black", borderColor:'#424242'}}>
-          {/* <Link to={`/boards/room/${rId}`} style={{width : "100%", height : "100%", textDecoration: "none"}}> */}
+        <Card elevation={5} className="root1" variant="outlined" style={{background: 'black' , borderColor:'#424242'}} onClick={this.handleSubmit(devc.devc)}>
           <CardActionArea style={{height : "100%", color: '#424242'}}>
             <div className="root2">
-              <Typography variant="h4">{deviceName}</Typography>
-              <Typography variant="h4">{state}</Typography>
+              <Typography variant="h4">{devc.devc.deviceName}</Typography>
+              <Typography variant="h4">{devc.devc.state.toString()}</Typography>
             </div>
           </CardActionArea>
         </Card>
@@ -46,13 +66,12 @@ class DevicesInRoom extends React.Component{
     return(
       <div>
         <AppBarStyled name="Devices"/>
-        {/* <Link to='/room/add/'><Button variant="contained" color="primary" style={{width: '95vw'}}><Add/></Button></Link> */}
         <div className="rms">
-        {this.state.devices.map((rm) => (
+        {this.state.devices.map((rm, index) => (
           <div>
           <Device
-            deviceName={rm.deviceName}
-            state={rm.state.toString()}
+            devc={rm}
+            index={index}
           />
           </div>
         ))
